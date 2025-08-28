@@ -48,9 +48,18 @@ export default function Login() {
             value={password}
             onChange={e => setPassword(e.target.value)}
           />
-          <button type="submit" className="bg-blue-500 text-white p-2 rounded">
-            Sign In
-          </button>
+          <div className="flex space-x-2">
+            <button type="submit" className="bg-blue-500 text-white p-2 rounded">
+              Sign In
+            </button>
+            <button
+              type="button"
+              className="bg-green-500 text-white p-2 rounded"
+              onClick={() => navigate('/signup')}
+            >
+              Sign Up
+            </button>
+          </div>
         </form>
         <div className="flex justify-center">
           <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
