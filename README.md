@@ -2,12 +2,11 @@
 
 ## Google OAuth Setup
 
-1. Install the dependencies and add the Google OAuth client library:
+1. Install dependencies:
 
-   ```bash
-   npm install
-   npm install @react-oauth/google
-   ```
+    ```bash
+    npm install
+    ```
 
 2. Create a Google OAuth Client ID and configure it for the app.
    - Copy the Client ID.
