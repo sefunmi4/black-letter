@@ -22,6 +22,8 @@ import EditQuest from "./EditQuest";
 
 import BugTracker from "./BugTracker";
 
+import Login from "./Login";
+
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 
 const PAGES = {
@@ -45,9 +47,11 @@ const PAGES = {
     workspace: workspace,
     
     EditQuest: EditQuest,
-    
+
     BugTracker: BugTracker,
-    
+
+    Login: Login,
+
 }
 
 function _getCurrentPage(url) {
@@ -92,11 +96,11 @@ function PagesContent() {
                 <Route path="/GuildDetail" element={<GuildDetail />} />
                 
                 <Route path="/workspace" element={<workspace />} />
-                
+
                 <Route path="/EditQuest" element={<EditQuest />} />
-                
+
                 <Route path="/BugTracker" element={<BugTracker />} />
-                
+                <Route path="/login" element={<Login />} />
             </Routes>
         </Layout>
     );
