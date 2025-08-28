@@ -24,7 +24,7 @@ import BugTracker from "./BugTracker";
 
 import Login from "./Login";
 
-import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 
 const PAGES = {
     
@@ -72,35 +72,36 @@ function PagesContent() {
     const location = useLocation();
     const currentPage = _getCurrentPage(location.pathname);
     
+    const token = localStorage.getItem('googleIdToken');
+    const localUser = localStorage.getItem('username');
+
+    if (!token && !localUser && location.pathname !== '/login') {
+        return <Navigate to="/login" replace />;
+    }
+
+    if ((token || localUser) && location.pathname === '/login') {
+        return <Navigate to="/Dashboard" replace />;
+    }
+
+    if (location.pathname === '/login') {
+        return <Login />;
+    }
+
     return (
         <Layout currentPageName={currentPage}>
-            <Routes>            
-                
-                    <Route path="/" element={<Dashboard />} />
-                
-                
+            <Routes>
+                <Route path="/" element={<Dashboard />} />
                 <Route path="/Dashboard" element={<Dashboard />} />
-                
                 <Route path="/CreateQuest" element={<CreateQuest />} />
-                
                 <Route path="/QuestLogs" element={<QuestLogs />} />
-                
                 <Route path="/QuestDetail" element={<QuestDetail />} />
-                
                 <Route path="/Community" element={<Community />} />
-                
                 <Route path="/Workspace" element={<Workspace />} />
-                
                 <Route path="/Settings" element={<Settings />} />
-                
                 <Route path="/GuildDetail" element={<GuildDetail />} />
-                
                 <Route path="/workspace" element={<workspace />} />
-
                 <Route path="/EditQuest" element={<EditQuest />} />
-
                 <Route path="/BugTracker" element={<BugTracker />} />
-                <Route path="/login" element={<Login />} />
             </Routes>
         </Layout>
     );
