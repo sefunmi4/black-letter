@@ -22,5 +22,5 @@
    npm run dev
    ```
 
-4. Visit `http://localhost:5173/login` to test the custom Google login.
+4. The app will redirect to `/login` for unauthenticated users. Create a username and password or use the Google sign-in button to access the dashboard.
 
