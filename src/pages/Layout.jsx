@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from "react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 import { User } from "@/api/entities";
 import { createPageUrl } from "@/utils";
 import {
@@ -107,6 +107,7 @@ const roleTypeColors = {
 
 export default function Layout({ children, currentPageName: propCurrentPageName }) {
   const location = useLocation();
+  const navigate = useNavigate();
   const [currentUser, setCurrentUser] = useState(null);
   const [showGitHubModal, setShowGitHubModal] = useState(false);
   const [showBugReportModal, setShowBugReportModal] = useState(false);
@@ -164,11 +165,18 @@ export default function Layout({ children, currentPageName: propCurrentPageName 
     setShowGitHubModal(false);
   };
 
+  const handleLogout = () => {
+    User.logout();
+    localStorage.removeItem("googleIdToken");
+    localStorage.removeItem("username");
+    navigate("/login");
+  };
+
   const handleTermsAccept = async () => {
     try {
-      await User.updateMyUserData({ 
-        terms_accepted: true, 
-        terms_accepted_date: new Date().toISOString() 
+      await User.updateMyUserData({
+        terms_accepted: true,
+        terms_accepted_date: new Date().toISOString()
       });
       setShowTermsModal(false);
       fetchUser();
@@ -178,7 +186,7 @@ export default function Layout({ children, currentPageName: propCurrentPageName 
   };
 
   const handleTermsDecline = () => {
-    User.logout();
+    handleLogout();
   };
 
   const handleTutorialComplete = async () => {
@@ -721,7 +729,7 @@ export default function Layout({ children, currentPageName: propCurrentPageName 
                   <Bug className="mr-2 h-4 w-4" />
                   <span>Report an Issue</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={User.logout} className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <DropdownMenuItem onClick={handleLogout} className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
@@ -791,7 +799,7 @@ export default function Layout({ children, currentPageName: propCurrentPageName 
                   <Bug className="mr-2 h-4 w-4" />
                   <span>Report an Issue</span>
                 </DropdownMenuItem>
-                <DropdownMenuItem onClick={User.logout} className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <DropdownMenuItem onClick={handleLogout} className="text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700">
                   <LogOut className="mr-2 h-4 w-4" />
                   <span>Log out</span>
                 </DropdownMenuItem>
