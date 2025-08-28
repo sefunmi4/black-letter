@@ -23,6 +23,7 @@ import EditQuest from "./EditQuest";
 import BugTracker from "./BugTracker";
 
 import Login from "./Login";
+import Signup from "./Signup";
 
 import { BrowserRouter as Router, Route, Routes, useLocation, Navigate } from 'react-router-dom';
 
@@ -50,7 +51,8 @@ const PAGES = {
 
     BugTracker: BugTracker,
 
-    Login: Login,
+      Login: Login,
+      Signup: Signup,
 
 }
 
@@ -75,17 +77,20 @@ function PagesContent() {
     const token = localStorage.getItem('googleIdToken');
     const localUser = localStorage.getItem('username');
 
-    if (!token && !localUser && location.pathname !== '/login') {
-        return <Navigate to="/login" replace />;
-    }
+      if (!token && !localUser && location.pathname !== '/login' && location.pathname !== '/signup') {
+          return <Navigate to="/login" replace />;
+      }
 
-    if ((token || localUser) && location.pathname === '/login') {
-        return <Navigate to="/Dashboard" replace />;
-    }
+      if ((token || localUser) && (location.pathname === '/login' || location.pathname === '/signup')) {
+          return <Navigate to="/Dashboard" replace />;
+      }
 
-    if (location.pathname === '/login') {
-        return <Login />;
-    }
+      if (location.pathname === '/login') {
+          return <Login />;
+      }
+      if (location.pathname === '/signup') {
+          return <Signup />;
+      }
 
     return (
         <Layout currentPageName={currentPage}>
