@@ -1,26 +1,20 @@
-# black-letter
+# Base44 App
 
-## Google OAuth Setup
 
-1. Install dependencies:
+This app was created automatically by Base44.
+It's a Vite+React app that communicates with the Base44 API.
 
-    ```bash
-    npm install
-    ```
+## Running the app
 
-2. Create a Google OAuth Client ID and configure it for the app.
-   - Copy the Client ID.
-   - Create a `.env` file in the project root with:
+```bash
+npm install
+npm run dev
+```
 
-     ```env
-     VITE_GOOGLE_CLIENT_ID=your-google-oauth-client-id
-     ```
+## Building the app
 
-3. Start the development server:
+```bash
+npm run build
+```
 
-   ```bash
-   npm run dev
-   ```
-
-4. The app will redirect to `/login` for unauthenticated users. Create a username and password or use the Google sign-in button to access the dashboard.
-
+For more information and support, please contact Base44 support at app@base44.com.
