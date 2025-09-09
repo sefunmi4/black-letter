@@ -7,8 +7,8 @@ const express = require('express');
 
 // setup in-memory pg and mock
 const db = newDb();
-const pg = db.adapters.createPg();
-jest.mock('pg', () => pg);
+const mockPg = db.adapters.createPg();
+jest.mock('pg', () => mockPg);
 
 const { pool } = require('../db');
 const questRouter = require('../routes/quests');
