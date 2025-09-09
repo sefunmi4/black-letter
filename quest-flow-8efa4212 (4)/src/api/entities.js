@@ -23,3 +23,27 @@ export const QuestLog = {
   update: (id, data) => request(`/api/quest_logs/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   remove: (id) => request(`/api/quest_logs/${id}`, { method: 'DELETE' })
 };
+
+function buildQuery(params = {}) {
+  const entries = Object.entries(params).filter(([, v]) => v !== undefined && v !== null);
+  if (entries.length === 0) return '';
+  const query = entries.map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`).join('&');
+  return `?${query}`;
+}
+
+export const QuestLike = {
+  create: (data) => request('/api/quest_likes', { method: 'POST', body: JSON.stringify(data) }),
+  delete: (id) => request(`/api/quest_likes/${id}`, { method: 'DELETE' }),
+  filter: (params = {}) => request(`/api/quest_likes${buildQuery(params)}`)
+};
+
+export const QuestComment = {
+  create: (data) => request('/api/quest_comments', { method: 'POST', body: JSON.stringify(data) }),
+  filter: (params = {}) => request(`/api/quest_comments${buildQuery(params)}`)
+};
+
+export const TeamApplication = {
+  create: (data) => request('/api/team_applications', { method: 'POST', body: JSON.stringify(data) }),
+  filter: (params = {}) => request(`/api/team_applications${buildQuery(params)}`),
+  update: (id, data) => request(`/api/team_applications/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+};

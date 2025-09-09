@@ -9,13 +9,15 @@ export default function CommentForm({ quest, onCommentPosted, areReviewsAllowed 
   const [rating, setRating] = useState(0);
   const [ratingCategory, setRatingCategory] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState("");
 
   const isDiscussion = quest.quest_type === 'discussion';
 
   const handleSubmit = async () => {
     if (!commentText.trim()) return;
     setIsSubmitting(true);
-    
+    setFeedback("");
+
     const commentData = {
       comment_text: commentText,
     };
@@ -28,11 +30,17 @@ export default function CommentForm({ quest, onCommentPosted, areReviewsAllowed 
       }
     }
 
-    await onCommentPosted(commentData);
-    setCommentText("");
-    setRating(0);
-    setRatingCategory("");
-    setIsSubmitting(false);
+    try {
+      await onCommentPosted(commentData);
+      setCommentText("");
+      setRating(0);
+      setRatingCategory("");
+      setFeedback("Comment posted!");
+    } catch {
+      setFeedback("Failed to post comment");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -116,6 +124,7 @@ export default function CommentForm({ quest, onCommentPosted, areReviewsAllowed 
           "Reviews and ratings are enabled for this post."
         )}
       </div>
+      {feedback && <p className="text-sm text-gray-600 dark:text-gray-300">{feedback}</p>}
     </div>
   );
 }

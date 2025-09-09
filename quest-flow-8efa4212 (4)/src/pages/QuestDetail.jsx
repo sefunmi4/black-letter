@@ -99,6 +99,8 @@ export default function QuestDetail() {
   const [linkedDiscussion, setLinkedDiscussion] = useState(null);
   const [parentQuest, setParentQuest] = useState(null);
   const [comments, setComments] = useState([]);
+  const [commentsPage, setCommentsPage] = useState(1);
+  const [hasMoreComments, setHasMoreComments] = useState(true);
   const [currentUser, setCurrentUser] = useState(null);
   const [isLoading, setIsLoading] = useState(true);
   const [isLiked, setIsLiked] = useState(false);
@@ -135,7 +137,7 @@ export default function QuestDetail() {
           me
         ] = await Promise.all([
           Quest.filter({ parent_quest_id: questId }, "-created_date"),
-          QuestComment.filter({ quest_id: questId }, "-created_date"),
+          QuestComment.filter({ quest_id: questId, page: 1, limit: 10 }),
           QuestLike.filter({ quest_id: questId }),
           currentQuest.parent_quest_id ? Quest.filter({ id: currentQuest.parent_quest_id }) : Promise.resolve([]),
           currentQuest.linked_discussion_id ? Quest.filter({ id: currentQuest.linked_discussion_id }) : Promise.resolve([]),
@@ -170,6 +172,8 @@ export default function QuestDetail() {
         setQuest(questWithCounts);
         setSubQuests(subQuestData);
         setComments(commentsData);
+        setCommentsPage(1);
+        setHasMoreComments(commentsData.length === 10);
         setParentQuest(parentData.length > 0 ? parentData[0] : null);
         setLinkedDiscussion(linkedDiscussionData.length > 0 ? linkedDiscussionData[0] : null);
 
@@ -227,6 +231,19 @@ export default function QuestDetail() {
 
     } catch (error) {
       console.error("Error posting comment:", error);
+    }
+  };
+
+  const loadMoreComments = async () => {
+    if (!quest) return;
+    const next = commentsPage + 1;
+    try {
+      const more = await QuestComment.filter({ quest_id: quest.id, page: next, limit: 10 });
+      setComments(prev => [...prev, ...more]);
+      setCommentsPage(next);
+      if (more.length < 10) setHasMoreComments(false);
+    } catch (error) {
+      console.error('Error loading more comments:', error);
     }
   };
 
@@ -928,6 +945,11 @@ export default function QuestDetail() {
                     </div>
                   )}
                 </div>
+                {hasMoreComments && (
+                  <div className="text-center mt-4">
+                    <Button variant="outline" onClick={loadMoreComments}>Load more</Button>
+                  </div>
+                )}
               </CardContent>
             </Card>
           </div>
