@@ -1,11 +1,16 @@
 const { pool } = require('../db');
+const guildMemberships = require('./guildMembership');
 
 async function create({ name, description, owner_id }) {
   const result = await pool.query(
     'INSERT INTO guilds (name, description, owner_id) VALUES ($1, $2, $3) RETURNING *',
     [name, description, owner_id]
   );
-  return result.rows[0];
+  const guild = result.rows[0];
+  if (guild && owner_id) {
+    await guildMemberships.addApproved(guild.id, owner_id, 'owner');
+  }
+  return guild;
 }
 
 async function list() {

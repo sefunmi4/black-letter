@@ -18,8 +18,10 @@ app.use(express.json());
 app.use('/api/quests', questRouter);
 
 beforeAll(async () => {
-  const sql = fs.readFileSync(path.join(__dirname, '../migrations/001-init.sql'), 'utf8');
-  await pool.query(sql);
+  const sql1 = fs.readFileSync(path.join(__dirname, '../migrations/001-init.sql'), 'utf8');
+  const sql2 = fs.readFileSync(path.join(__dirname, '../migrations/007-quest-guild-id.sql'), 'utf8');
+  await pool.query(sql1);
+  await pool.query(sql2);
   await pool.query("INSERT INTO users (email, hashed_password) VALUES ('test@example.com','x')");
 });
 
