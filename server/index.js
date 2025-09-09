@@ -16,6 +16,9 @@ const questLogsRouter = require('./routes/questLogs');
 const notificationsRouter = require('./routes/notifications');
 const partyMessagesRouter = require('./routes/partyMessages');
 const bugReportsRouter = require('./routes/bugReports');
+const teamApplicationsRouter = require('./routes/teamApplications');
+const questLikesRouter = require('./routes/questLikes');
+const questCommentsRouter = require('./routes/questComments');
 
 const app = express();
 app.use(cors());
@@ -109,6 +112,9 @@ app.use('/api/quest_logs', questLogsRouter);
 app.use('/api/notifications', notificationsRouter);
 app.use('/api/party_messages', partyMessagesRouter);
 app.use('/api/bug_reports', bugReportsRouter);
+app.use('/api/team_applications', teamApplicationsRouter);
+app.use('/api/quest_likes', questLikesRouter);
+app.use('/api/quest_comments', questCommentsRouter);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
