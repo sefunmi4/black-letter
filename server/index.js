@@ -1,20 +1,30 @@
 require('dotenv').config();
 
 const express = require('express');
+const http = require('http');
 const cors = require('cors');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { pool } = require('./db');
 const { authenticateToken } = require('./auth');
 const { runMigrations } = require('./migrate');
+const { init } = require('./socket');
 
 const questsRouter = require('./routes/quests');
 const guildsRouter = require('./routes/guilds');
 const questLogsRouter = require('./routes/questLogs');
+const notificationsRouter = require('./routes/notifications');
+const partyMessagesRouter = require('./routes/partyMessages');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
+
+const server = http.createServer(app);
+const io = init(server);
+io.on('connection', () => {
+  console.log('client connected');
+});
 
 // run migrations on startup
 runMigrations().catch(err => {
@@ -95,8 +105,10 @@ app.get('/auth/me', authenticateToken, async (req, res) => {
 app.use('/api/quests', questsRouter);
 app.use('/api/guilds', guildsRouter);
 app.use('/api/quest_logs', questLogsRouter);
+app.use('/api/notifications', notificationsRouter);
+app.use('/api/party_messages', partyMessagesRouter);
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+server.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
 });
