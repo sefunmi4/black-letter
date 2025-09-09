@@ -7,12 +7,12 @@ const express = require('express');
 
 // setup in-memory pg and mock
 const db = newDb();
-const pg = db.adapters.createPg();
-jest.mock('pg', () => pg);
+const mockPg = db.adapters.createPg();
+jest.mock('pg', () => mockPg);
 
-const emitMock = jest.fn();
+const mockEmit = jest.fn();
 jest.mock('../socket', () => ({
-  getIo: () => ({ emit: emitMock })
+  getIo: () => ({ emit: mockEmit })
 }));
 
 const { pool } = require('../db');
@@ -63,5 +63,5 @@ test('bug report CRUD and notifications', async () => {
 
   notifRows = await pool.query('SELECT * FROM notifications');
   expect(notifRows.rows.length).toBe(2);
-  expect(emitMock).toHaveBeenCalled();
+  expect(mockEmit).toHaveBeenCalled();
 });

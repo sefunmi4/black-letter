@@ -4,8 +4,8 @@ const path = require('path');
 
 // create in-memory pg and mock 'pg' module
 const db = newDb();
-const pg = db.adapters.createPg();
-jest.mock('pg', () => pg);
+const mockPg = db.adapters.createPg();
+jest.mock('pg', () => mockPg);
 
 const { pool } = require('../db');
 const questModel = require('../models/quest');
