@@ -20,6 +20,7 @@ const bugReportsRouter = require('./routes/bugReports');
 const teamApplicationsRouter = require('./routes/teamApplications');
 const questLikesRouter = require('./routes/questLikes');
 const questCommentsRouter = require('./routes/questComments');
+const guildMembershipsRouter = require('./routes/guildMemberships');
 
 const app = express();
 app.use(cors());
@@ -117,6 +118,7 @@ app.use('/api/bug_reports', bugReportsRouter);
 app.use('/api/team_applications', teamApplicationsRouter);
 app.use('/api/quest_likes', questLikesRouter);
 app.use('/api/quest_comments', questCommentsRouter);
+app.use('/api/guild_memberships', guildMembershipsRouter);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {

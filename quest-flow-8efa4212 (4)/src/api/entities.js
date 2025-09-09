@@ -2,6 +2,7 @@ import { request } from './client';
 
 export const Quest = {
   list: () => request('/api/quests'),
+  filter: (params = {}) => request(`/api/quests${buildQuery(params)}`),
   create: (data) => request('/api/quests', { method: 'POST', body: JSON.stringify(data) }),
   get: (id) => request(`/api/quests/${id}`),
   update: (id, data) => request(`/api/quests/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
@@ -14,6 +15,13 @@ export const Guild = {
   get: (id) => request(`/api/guilds/${id}`),
   update: (id, data) => request(`/api/guilds/${id}`, { method: 'PUT', body: JSON.stringify(data) }),
   remove: (id) => request(`/api/guilds/${id}`, { method: 'DELETE' })
+};
+
+export const GuildMembership = {
+  create: (data) => request('/api/guild_memberships', { method: 'POST', body: JSON.stringify(data) }),
+  filter: (params = {}) => request(`/api/guild_memberships${buildQuery(params)}`),
+  approve: (id, data = {}) => request(`/api/guild_memberships/${id}/approve`, { method: 'POST', body: JSON.stringify(data) }),
+  delete: (id) => request(`/api/guild_memberships/${id}`, { method: 'DELETE' })
 };
 
 export const QuestLog = {

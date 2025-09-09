@@ -12,14 +12,15 @@
 
 ## Quests (requires authentication)
 - **GET /api/quests**
-  - Response: `[{ id, title, description, user_id, created_at }]`
+  - Query params: `guild_id?`
+  - Response: `[{ id, title, description, user_id, guild_id, created_at }]`
 - **POST /api/quests**
-  - Request: `{ title, description, user_id }`
-  - Response: created quest
+  - Request: `{ title, description, guild_id? }`
+  - Response: created quest (must be member of guild to post with `guild_id`)
 - **GET /api/quests/:id**
   - Response: single quest
 - **PUT /api/quests/:id**
-  - Request: `{ title?, description?, user_id? }`
+  - Request: `{ title?, description?, user_id?, guild_id? }`
   - Response: updated quest
 - **DELETE /api/quests/:id**
   - Response: `204 No Content`
@@ -30,6 +31,12 @@
 - **GET /api/guilds/:id** – retrieve guild
 - **PUT /api/guilds/:id** – update guild `{ name?, description?, owner_id? }`
 - **DELETE /api/guilds/:id** – delete guild
+
+## Guild Memberships (requires authentication)
+- **GET /api/guild_memberships** – filter memberships by `guild_id`, `user_id`, `user_email`, `status`
+- **POST /api/guild_memberships** – request membership `{ guild_id }`
+- **POST /api/guild_memberships/:id/approve** – approve membership request (owner/moderator only) `{ role? }`
+- **DELETE /api/guild_memberships/:id** – revoke or leave membership
 
 ## Quest Logs (requires authentication)
 - **GET /api/quest_logs** – list logs
