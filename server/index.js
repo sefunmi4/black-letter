@@ -2,25 +2,24 @@ require('dotenv').config();
 
 const express = require('express');
 const cors = require('cors');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const { pool } = require('./db');
 const { authenticateToken } = require('./auth');
+const { runMigrations } = require('./migrate');
+
+const questsRouter = require('./routes/quests');
+const guildsRouter = require('./routes/guilds');
+const questLogsRouter = require('./routes/questLogs');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-// ensure users table exists
-pool.query(`
-  CREATE TABLE IF NOT EXISTS users (
-    id SERIAL PRIMARY KEY,
-    email TEXT UNIQUE NOT NULL,
-    hashed_password TEXT NOT NULL,
-    created_at TIMESTAMPTZ DEFAULT NOW()
-  )
-`).catch(err => {
-  console.error('Failed to create users table', err);
+// run migrations on startup
+runMigrations().catch(err => {
+  console.error('Failed to run migrations', err);
+  process.exit(1);
 });
 
 app.get('/health', async (req, res) => {
@@ -91,6 +90,11 @@ app.get('/auth/me', authenticateToken, async (req, res) => {
     res.status(500).json({ error: 'internal server error' });
   }
 });
+
+// entity routes
+app.use('/api/quests', questsRouter);
+app.use('/api/guilds', guildsRouter);
+app.use('/api/quest_logs', questLogsRouter);
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
